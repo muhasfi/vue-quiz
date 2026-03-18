@@ -176,9 +176,9 @@ const wrongCount = computed(
     <Transition name="drawer">
       <div v-if="showDrawer" class="review-drawer">
         <!-- Handle -->
-        <div class="drawer-handle-wrap">
+        <!-- <div class="drawer-handle-wrap">
           <div class="drawer-handle"></div>
-        </div>
+        </div> -->
 
         <!-- Header -->
         <div class="drawer-header">
@@ -197,7 +197,7 @@ const wrongCount = computed(
               Semua
             </button>
             <button
-              class="filter-pill filter-true"
+              class="filter-pill filter-correct"
               :class="{ active: filter === 'correct' }"
               @click="filter = 'correct'"
             >
@@ -310,11 +310,11 @@ const wrongCount = computed(
   flex-direction: column;
 }
 
-.drawer-handle-wrap {
+/* .drawer-handle-wrap {
   display: flex;
   justify-content: center;
   padding: 12px 0 0;
-}
+} */
 .drawer-handle {
   width: 36px;
   height: 4px;
@@ -378,6 +378,10 @@ const wrongCount = computed(
 }
 .filter-wrong.active {
   background: #f87171;
+  color: #0a0a0f;
+}
+.filter-correct.active {
+  background: #4ade80;
   color: #0a0a0f;
 }
 
