@@ -197,18 +197,18 @@ const wrongCount = computed(
               Semua
             </button>
             <button
-              class="filter-pill filter-wrong"
-              :class="{ active: filter === 'wrong' }"
-              @click="filter = 'wrong'"
-            >
-              Salah
-            </button>
-            <button
               class="filter-pill filter-true"
               :class="{ active: filter === 'correct' }"
               @click="filter = 'correct'"
             >
               Benar
+            </button>
+            <button
+              class="filter-pill filter-wrong"
+              :class="{ active: filter === 'wrong' }"
+              @click="filter = 'wrong'"
+            >
+              Salah
             </button>
             <button class="drawer-close" @click="showDrawer = false">✕</button>
           </div>
