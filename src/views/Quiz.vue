@@ -39,7 +39,7 @@ const questionPage = computed(() => {
 
 // ✅ Progress bar
 const barPercentage = computed(() => {
-  return `${((currentQuestionIndex.value + 1) / quiz.questions.length) * 100}%`;
+  return `${Math.round(((currentQuestionIndex.value + 1) / quiz.questions.length) * 100)}%`;
 });
 
 // ✅ Cek apakah semua soal sudah dijawab
@@ -141,6 +141,8 @@ function cancelFinish() {
         v-else
         :quizQuestionsLength="quiz.questions.length"
         :numberOfCorrectAnswer="numberOfCorrectAnswer"
+        :questions="quiz.questions"
+        :userAnswers="userAnswers"
       />
 
       <QuizNavigation
@@ -148,6 +150,8 @@ function cancelFinish() {
         :currentQuestionIndex="currentQuestionIndex"
         :totalQuestions="quiz.questions.length"
         :allAnswered="allAnswered"
+        :questions="quiz.questions"
+        :userAnswers="userAnswers"
         @next="next"
         @prev="prev"
         @finish="finishQuiz"

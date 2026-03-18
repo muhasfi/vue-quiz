@@ -116,11 +116,11 @@
       },
       {
         "id": 11,
-        "text": "Which PHP framework is widely used for web development?",
+        "text": "Which keyword is used to declare a constant in JavaScript?",
         "answers": [
-          { "id": 1, "label": "A", "text": "Laravel", "correct": true },
-          { "id": 2, "label": "B", "text": "Spring", "correct": false },
-          { "id": 3, "label": "C", "text": "Flask", "correct": false }
+          { "id": 1, "label": "A", "text": "let", "correct": false },
+          { "id": 2, "label": "B", "text": "const", "correct": true },
+          { "id": 3, "label": "C", "text": "define", "correct": false }
         ]
       },
       {

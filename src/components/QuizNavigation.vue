@@ -1,11 +1,31 @@
 <script setup>
-defineProps({
+import { computed } from "vue";
+
+const props = defineProps({
   currentQuestionIndex: Number,
   totalQuestions: Number,
   allAnswered: Boolean,
 });
 
 const emit = defineEmits(["next", "prev", "finish"]);
+
+// Sliding window — tampil 5 dot di sekitar posisi aktif
+const visibleDots = computed(() => {
+  const total = props.totalQuestions;
+  const current = props.currentQuestionIndex;
+  const half = 2;
+
+  return Array.from({ length: total }, (_, i) => {
+    const dist = Math.abs(i - current);
+    return {
+      index: i,
+      active: i === current,
+      done: i < current,
+      hidden: dist > half,
+      edge: dist === half,
+    };
+  });
+});
 </script>
 
 <template>
@@ -30,17 +50,16 @@ const emit = defineEmits(["next", "prev", "finish"]);
 
     <div class="dot-nav">
       <div
-        v-for="n in Math.min(totalQuestions, 8)"
-        :key="n"
+        v-for="dot in visibleDots"
+        :key="dot.index"
         class="dot"
         :class="{
-          'dot-active': n - 1 === currentQuestionIndex,
-          'dot-done': n - 1 < currentQuestionIndex,
+          'dot-active': dot.active,
+          'dot-done': dot.done,
+          'dot-hidden': dot.hidden,
+          'dot-edge': dot.edge,
         }"
       ></div>
-      <span v-if="totalQuestions > 8" class="dot-more"
-        >+{{ totalQuestions - 8 }}</span
-      >
     </div>
 
     <div class="right-btns">
@@ -70,7 +89,6 @@ const emit = defineEmits(["next", "prev", "finish"]);
         <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
         </svg>
-        <!-- Sembunyikan teks "Selesai" di layar sangat kecil, icon saja -->
         <span class="btn-label">Selesai</span>
       </button>
     </div>
@@ -124,13 +142,13 @@ const emit = defineEmits(["next", "prev", "finish"]);
   transform: translateX(-2px);
 }
 
-/* Dot nav */
 .dot-nav {
   display: flex;
   align-items: center;
   gap: 6px;
   flex: 1;
   justify-content: center;
+  min-width: 0;
 }
 
 .dot {
@@ -138,7 +156,8 @@ const emit = defineEmits(["next", "prev", "finish"]);
   height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .dot-active {
@@ -152,14 +171,24 @@ const emit = defineEmits(["next", "prev", "finish"]);
   background: rgba(249, 115, 22, 0.4);
 }
 
-.dot-more {
-  font-family: "Outfit", sans-serif;
-  font-size: 11px;
-  color: #334155;
-  margin-left: 2px;
+/* Dot tepi — mengecil sebagai efek fade */
+.dot-edge {
+  width: 4px;
+  height: 4px;
+  opacity: 0.4;
 }
 
-/* Right buttons group */
+/* Dot tersembunyi — collapse tanpa ganggu layout */
+.dot-hidden {
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
 .right-btns {
   display: flex;
   gap: 10px;
@@ -189,9 +218,6 @@ const emit = defineEmits(["next", "prev", "finish"]);
   box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5);
 }
 
-/* Tambahkan di bagian bawah <style scoped> */
-
-/* Tablet */
 @media (max-width: 640px) {
   .navigation {
     gap: 10px;
@@ -219,7 +245,6 @@ const emit = defineEmits(["next", "prev", "finish"]);
   }
 }
 
-/* Mobile kecil */
 @media (max-width: 400px) {
   .navigation {
     flex-wrap: wrap;
@@ -232,14 +257,13 @@ const emit = defineEmits(["next", "prev", "finish"]);
     gap: 5px;
   }
 
-  /* Sembunyikan teks, tampilkan icon saja pada btn-finish di mobile kecil */
   .btn-finish .btn-label {
     display: none;
   }
 
   .dot-nav {
-    order: -1; /* pindah dot ke baris atas */
-    flex: 0 0 100%; /* full width */
+    order: -1;
+    flex: 0 0 100%;
     justify-content: center;
     margin-bottom: 4px;
   }
